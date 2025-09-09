@@ -1,103 +1,109 @@
-import Image from "next/image";
+// app/page.tsx
+import JenjangCard from "@/components/JenjangCard";
+import BeritaCard from "@/components/BeritaCard";
 
-export default function Home() {
+// 1. Definisikan fungsi untuk mengambil data DI LUAR komponen
+async function getBerita() {
+  // Gunakan URL dari environment variable jika ada, jika tidak, pakai localhost
+  const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api/berita?populate=*';
+  
+  try {
+    const res = await fetch(apiUrl, {
+      cache: 'no-store' // Untuk development, agar data selalu baru
+    });
+
+    if (!res.ok) {
+      // Log error yang lebih deskriptif
+      console.error('Gagal mengambil data dari Strapi:', res.status, res.statusText);
+      throw new Error('Gagal mengambil data berita');
+    }
+
+    const data = await res.json();
+    return data.data || []; // Kembalikan data.data, atau array kosong jika tidak ada
+  } catch (error) {
+    console.error('Error saat fetching data berita:', error);
+    return []; // Kembalikan array kosong jika terjadi error
+  }
+}
+
+// 2. Hanya ada SATU deklarasi komponen Home, dan jadikan async
+export default async function Home() {
+  const berita = await getBerita(); // Panggil fungsi dan tunggu hasilnya
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <> {/* Gunakan Fragment karena akan ada lebih dari satu elemen utama */}
+      {/* Hero Section */}
+      <section className="text-center py-20 bg-blue-600 text-white">
+        <h1 className="text-5xl font-bold mb-4">Selamat Datang di Sekolah Impian</h1>
+        <p className="text-xl mb-8">Membentuk Generasi Cerdas, Kreatif, dan Berakhlak Mulia</p>
+        <a href="/pendaftaran" className="bg-white text-blue-600 font-bold py-3 px-8 rounded-full hover:bg-gray-200 text-lg">
+          Info PPDB 2026
+        </a>
+      </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      <main className="container mx-auto px-6 py-12">
+        {/* Bagian Sambutan Kepala Sekolah */}
+        <section>
+          <h2 className="text-3xl font-bold text-center mb-8">Sambutan Kepala Sekolah</h2>
+          <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-50 p-8 rounded-lg">
+            <div className="md:w-1/4 text-center">
+              <img src="https://via.placeholder.com/150" alt="Kepala Sekolah" className="rounded-full mx-auto shadow-md" />
+              <h3 className="font-bold mt-4 text-xl">Bpk. Budi Santoso, M.Pd.</h3>
+              <p className="text-gray-500">Kepala Sekolah</p>
+            </div>
+            <div className="md:w-3/4">
+              <p className="text-gray-700 leading-relaxed text-lg">
+                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa. Kami sangat bangga mempersembahkan website ini sebagai jembatan informasi antara sekolah dengan orang tua, siswa, dan masyarakat. Di sini, kami berkomitmen untuk memberikan pendidikan terbaik yang berkesinambungan dari jenjang TK, SD, hingga SMP..."
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* BAGIAN: Jenjang Pendidikan */}
+        <section className="mt-16">
+          <h2 className="text-3xl font-bold text-center mb-8">Pendidikan Berjenjang & Berkelanjutan</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <JenjangCard 
+              title="Taman Kanak-Kanak (TK)"
+              description="Masa bermain sambil belajar yang menyenangkan untuk fondasi masa depan."
+              link="/jenjang/tk"
+              bgColor="bg-green-500"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+            <JenjangCard 
+              title="Sekolah Dasar (SD)"
+              description="Menumbuhkan potensi, kreativitas, dan karakter positif siswa."
+              link="/jenjang/sd"
+              bgColor="bg-yellow-500"
+            />
+            <JenjangCard 
+              title="Sekolah Menengah (SMP)"
+              description="Mempersiapkan siswa untuk jenjang pendidikan lebih tinggi dan tantangan global."
+              link="/jenjang/smp"
+              bgColor="bg-purple-500"
+            />
+          </div>
+        </section>
+        
+        {/* BAGIAN BARU: Berita Terbaru */}
+        <section className="mt-16">
+          <h2 className="text-3xl font-bold text-center mb-8">Berita & Informasi Terbaru</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {berita && berita.length > 0 ? (
+              berita.map((item: any) => (
+                <BeritaCard
+                  key={item.id}
+                  judul={item.attributes.judul}
+                  // Tambahkan pengecekan untuk gambar agar tidak error jika tidak ada gambar
+                  gambarUrl={item.attributes.gambar_unggulan?.data?.attributes?.url || ''}
+                  slug={item.id.toString()} // Ubah slug menjadi string
+                />
+              ))
+            ) : (
+              <p className="text-center col-span-3 text-gray-500">Belum ada berita yang dipublikasikan.</p>
+            )}
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </>
   );
 }
