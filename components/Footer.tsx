@@ -2,6 +2,7 @@
 import Link from "next/link";
 
 const Footer = () => {
+  // PASTIKAN ANDA MENGGUNAKAN 'bg-sekolah-primary' DI SINI
   return (
     <footer className="bg-sekolah-primary text-white mt-auto">
       <div className="container mx-auto px-6 py-12">
@@ -34,7 +35,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-blue-900 py-4">
+      {/* Ganti juga warna di bagian bawah footer jika ada */}
+      <div className="bg-blue-900 py-4"> 
         <p className="text-center text-gray-400 text-sm">
           &copy; {new Date().getFullYear()} Sekolah Impian. All Rights Reserved.
         </p>
