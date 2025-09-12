@@ -11,6 +11,16 @@ export interface Berita {
   };
 }
 
+export interface Guru {
+  id: number;
+  nama_lengkap: string;
+  jabatan: string;
+  kutipan: string;
+  foto: {
+    url: string;
+  };
+}
+
 export default {
   /**
    * An asynchronous register function that runs before

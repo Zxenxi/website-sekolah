@@ -21,7 +21,8 @@ const Header = () => {
         </Link>
         <div className="hidden md:flex items-center space-x-8">
           <Link href="/" className="text-gray-700 hover:text-sekolah-secondary font-semibold">Beranda</Link>
-          <Link href="/profil" className="text-gray-700 hover:text-sekolah-secondary font-semibold">Profil</Link>
+          {/* <Link href="/profil" className="text-gray-700 hover:text-sekolah-secondary font-semibold">Profil</Link> */}
+          <Link href="/profil/guru" className="text-gray-700 hover:text-sekolah-secondary font-semibold">Profil Guru</Link>
           <Link href="/kontak" className="text-gray-700 hover:text-sekolah-secondary font-semibold">Kontak</Link>
           <Link href="/pendaftaran" className="bg-sekolah-accent text-sekolah-primary font-bold py-2 px-5 rounded-full hover:bg-yellow-400 transition-colors duration-300">
             Pendaftaran
