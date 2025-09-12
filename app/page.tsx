@@ -1,48 +1,51 @@
-// app/page.tsx
+// app/page.tsx (Versi Final yang Benar)
 import JenjangCard from "@/components/JenjangCard";
 import BeritaCard from "@/components/BeritaCard";
+import { Berita } from "@/types"; // Pastikan impor ini ada
 
-// 1. Definisikan fungsi untuk mengambil data DI LUAR komponen
-async function getBerita() {
-  // Gunakan URL dari environment variable jika ada, jika tidak, pakai localhost
-  const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api/berita?populate=*';
+async function getBerita(): Promise<Berita[]> {
+  const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api/beritas?populate=*';
   
   try {
-    const res = await fetch(apiUrl, {
-      cache: 'no-store' // Untuk development, agar data selalu baru
-    });
-
+    const res = await fetch(apiUrl, { cache: 'no-store' });
     if (!res.ok) {
-      // Log error yang lebih deskriptif
-      console.error('Gagal mengambil data dari Strapi:', res.status, res.statusText);
-      throw new Error('Gagal mengambil data berita');
+      throw new Error(`Gagal fetch data: ${res.statusText}`);
     }
+    
+    const body = await res.json();
 
-    const data = await res.json();
-    return data.data || []; // Kembalikan data.data, atau array kosong jika tidak ada
+    // Langsung kembalikan body.data karena strukturnya sudah sederhana
+    return body.data || []; 
+
   } catch (error) {
-    console.error('Error saat fetching data berita:', error);
-    return []; // Kembalikan array kosong jika terjadi error
+    console.error("Error di getBerita:", error);
+    return [];
   }
 }
 
-// 2. Hanya ada SATU deklarasi komponen Home, dan jadikan async
 export default async function Home() {
-  const berita = await getBerita(); // Panggil fungsi dan tunggu hasilnya
+  const berita = await getBerita();
 
   return (
-    <> {/* Gunakan Fragment karena akan ada lebih dari satu elemen utama */}
-      {/* Hero Section */}
-      <section className="text-center py-20 bg-blue-600 text-white">
-        <h1 className="text-5xl font-bold mb-4">Selamat Datang di Sekolah Impian</h1>
-        <p className="text-xl mb-8">Membentuk Generasi Cerdas, Kreatif, dan Berakhlak Mulia</p>
-        <a href="/pendaftaran" className="bg-white text-blue-600 font-bold py-3 px-8 rounded-full hover:bg-gray-200 text-lg">
-          Info PPDB 2026
-        </a>
+    <>
+{/* Hero Section */}
+      <section className="relative h-[60vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('/hero-background.jpg')" }}>
+        <div className="absolute inset-0 bg-black/50"></div> {/* Overlay gelap */}
+        <div className="relative z-10 text-white px-4">
+          <h1 className="text-5xl md:text-6xl font-bold font-poppins mb-4 drop-shadow-lg">
+            Selamat Datang di Sekolah Impian
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 drop-shadow-md">
+            Membentuk Generasi Cerdas, Kreatif, dan Berakhlak Mulia
+          </p>
+          <a href="/pendaftaran" className="bg-sekolah-accent text-sekolah-primary font-bold py-3 px-8 rounded-full hover:bg-yellow-400 text-lg transition-colors duration-300 transform hover:scale-105">
+            Info PPDB 2026
+          </a>
+        </div>
       </section>
 
+{/* Sisa halaman ... */}
       <main className="container mx-auto px-6 py-12">
-        {/* Bagian Sambutan Kepala Sekolah */}
         <section>
           <h2 className="text-3xl font-bold text-center mb-8">Sambutan Kepala Sekolah</h2>
           <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-50 p-8 rounded-lg">
@@ -53,13 +56,12 @@ export default async function Home() {
             </div>
             <div className="md:w-3/4">
               <p className="text-gray-700 leading-relaxed text-lg">
-                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa. Kami sangat bangga mempersembahkan website ini sebagai jembatan informasi antara sekolah dengan orang tua, siswa, dan masyarakat. Di sini, kami berkomitmen untuk memberikan pendidikan terbaik yang berkesinambungan dari jenjang TK, SD, hingga SMP..."
+                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa..."
               </p>
             </div>
           </div>
         </section>
 
-        {/* BAGIAN: Jenjang Pendidikan */}
         <section className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-8">Pendidikan Berjenjang & Berkelanjutan</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -84,20 +86,24 @@ export default async function Home() {
           </div>
         </section>
         
-        {/* BAGIAN BARU: Berita Terbaru */}
+        {/* BAGIAN BERITA TERBARU */}
         <section className="mt-16">
           <h2 className="text-3xl font-bold text-center mb-8">Berita & Informasi Terbaru</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {berita && berita.length > 0 ? (
-              berita.map((item: any) => (
-                <BeritaCard
-                  key={item.id}
-                  judul={item.attributes.judul}
-                  // Tambahkan pengecekan untuk gambar agar tidak error jika tidak ada gambar
-                  gambarUrl={item.attributes.gambar_unggulan?.data?.attributes?.url || ''}
-                  slug={item.id.toString()} // Ubah slug menjadi string
-                />
+              // PERUBAHAN UTAMA DI SINI
+              // app/page.tsx -> di dalam bagian .map()
+              berita.map((item: Berita) => (
+                <BeritaCard key={item.id} item={item} />
               ))
+              // berita.map((item: Berita) => (
+              //   <BeritaCard
+              //     key={item.id}
+              //     judul={item.judul} // Akses langsung
+              //     gambarUrl={item.gambar_unggulan?.url || ''} // Akses langsung
+              //     slug={item.slug} // Akses langsung
+              //   />
+              // ))
             ) : (
               <p className="text-center col-span-3 text-gray-500">Belum ada berita yang dipublikasikan.</p>
             )}

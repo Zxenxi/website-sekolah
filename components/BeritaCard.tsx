@@ -1,28 +1,38 @@
 // components/BeritaCard.tsx
 import Image from 'next/image';
 import Link from 'next/link';
+import { Berita } from '@/types';
 
+// Ubah props untuk menerima seluruh objek 'item'
 interface BeritaCardProps {
-  judul: string;
-  gambarUrl: string;
-  slug: string; // Slug sekarang adalah string dari Strapi
+  item: Berita;
 }
 
-const BeritaCard = ({ judul, gambarUrl, slug }: BeritaCardProps) => {
+const BeritaCard = ({ item }: BeritaCardProps) => {
   const strapiBaseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+  const imageUrl = item.gambar_unggulan?.url;
 
   return (
-    <Link href={`/berita/${slug}`} className="block group"> {/* Link sudah benar */}
-      <div className="overflow-hidden rounded-lg shadow-lg">
+    <Link href={item.slug ? `/berita/${item.slug}` : '#'} className="block group bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+      <div className="relative">
         <Image
-          src={gambarUrl ? `${strapiBaseUrl}${gambarUrl}` : '/placeholder-image.jpg'} // Fallback jika tidak ada gambar
-          alt={judul}
+          src={imageUrl ? `${strapiBaseUrl}${imageUrl}` : 'https://via.placeholder.com/400x250'}
+          alt={item.judul}
           width={400}
           height={250}
-          className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      <h3 className="font-bold mt-4 text-lg group-hover:text-blue-600">{judul}</h3>
+      <div className="p-5">
+        <p className="text-sm text-gray-500 mb-2">
+          {new Date(item.publishedAt).toLocaleDateString('id-ID', {
+            year: 'numeric', month: 'long', day: 'numeric'
+          })}
+        </p>
+        <h3 className="font-bold font-poppins text-lg text-sekolah-primary group-hover:text-sekolah-secondary transition-colors duration-300 line-clamp-2">
+          {item.judul}
+        </h3>
+      </div>
     </Link>
   );
 }

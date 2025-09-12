@@ -1,25 +1,33 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// 1. Impor font yang kita inginkan
+import { Poppins, Lato } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+// 2. Konfigurasi font
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ['400', '600', '700'], // Berat font yang akan digunakan
+  variable: '--font-poppins',   // Nama variabel CSS
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ['400', '700'],
+  variable: '--font-lato',
+});
 
 export const metadata: Metadata = {
-  title: "Nama Sekolah Impian",
-  description: "Website resmi sekolah terpadu TK, SD, SMP.",
+  // ... (metadata Anda)
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode; }) {
   return (
-    <html lang="id">
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+    // 3. Terapkan font ke seluruh halaman
+    <html lang="id" className={`${poppins.variable} ${lato.variable}`}>
+      <body className="flex flex-col min-h-screen font-lato"> {/* Font default untuk body */}
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
