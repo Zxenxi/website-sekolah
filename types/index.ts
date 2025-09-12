@@ -21,6 +21,16 @@ export interface Guru {
   };
 }
 
+export interface HalamanJenjang {
+  id: number;
+  judul_utama: string;
+  deskripsi: string;
+  gambar_header: {
+    url: string;
+  };
+  publishedAt: string; // Strapi menambahkannya secara otomatis
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
