@@ -26,6 +26,10 @@
         "videos",
         "audios"
       ]
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "judul"
     }
   }
 }

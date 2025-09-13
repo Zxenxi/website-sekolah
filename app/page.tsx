@@ -56,7 +56,7 @@ export default async function Home() {
             <div className="md:w-1/4 text-center">
               {/* 2. GANTI <img> DENGAN <Image> */}
               <Image 
-                src="https://via.placeholder.com/150" 
+                src="logo.svg" 
                 alt="Kepala Sekolah"
                 width={160} // Lebar asli (w-40)
                 height={160} // Tinggi asli (h-40)

@@ -4,6 +4,11 @@ import { notFound } from "next/navigation";
 import MarkdownIt from "markdown-it";
 import { Berita } from "@/types";
 
+type PageProps = {
+  params?: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[]>>;
+};
+
 // Fungsi ambil data 1 berita dari Strapi
 async function getSingleBerita(slug: string): Promise<Berita | null> {
   const apiUrl = `${
@@ -39,11 +44,9 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
   }
 }
 
-// ✅ Casting `props` agar aman saat build di Vercel
-export default async function BeritaDetailPage(props: any) {
-  const { params } = props as { params: { slug: string } };
-
-  const berita = await getSingleBerita(params.slug);
+export default async function BeritaDetailPage({ params }: PageProps) {
+  const resolvedParams = params ? await params : { slug: "" };
+  const berita = await getSingleBerita(resolvedParams.slug);
   if (!berita) notFound();
 
   const md = new MarkdownIt({ html: true });
