@@ -1,4 +1,4 @@
-// app/berita/[slug]/page.tsx (Versi Final Diperbaiki)
+// app/berita/[slug]/page.tsx (Versi Final Diperbaiki untuk Vercel Build)
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import MarkdownIt from 'markdown-it';
