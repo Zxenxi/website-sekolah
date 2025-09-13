@@ -2,7 +2,6 @@
 import JenjangCard from "@/components/JenjangCard";
 import BeritaCard from "@/components/BeritaCard";
 import { Berita } from "@/types";
-import { getBerita } from "@/lib/api"; // Asumsi fungsi fetch dipindah ke lib/api.ts
 import Image from 'next/image';
 import AnimatedSection from "@/components/AnimatedSection"; // Impor komponen animasi
 
