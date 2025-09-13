@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import MarkdownIt from "markdown-it";
-import { Berita } from "@/types"; // Pastikan types sudah sesuai dengan schema Strapi
+import { Berita } from "@/types";
 
 // Fungsi ambil data 1 berita dari Strapi
 async function getSingleBerita(slug: string): Promise<Berita | null> {
@@ -12,18 +12,13 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
 
   try {
     const res = await fetch(apiUrl, { cache: "no-store" });
-    if (!res.ok) {
-      throw new Error("Gagal mengambil data dari Strapi");
-    }
+    if (!res.ok) throw new Error("Gagal mengambil data dari Strapi");
 
     const body = await res.json();
-
-    if (!body.data || body.data.length === 0) {
-      return null;
-    }
+    if (!body.data || body.data.length === 0) return null;
 
     const item = body.data[0];
-    const attr = item.attributes || item; // fallback kalau Strapi masih pakai attributes
+    const attr = item.attributes || item;
 
     return {
       id: item.id,
@@ -32,7 +27,10 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
       slug: attr.slug,
       publishedAt: attr.publishedAt,
       gambar_unggulan: {
-        url: attr.gambar_unggulan?.data?.attributes?.url || attr.gambar_unggulan?.url || "",
+        url:
+          attr.gambar_unggulan?.data?.attributes?.url ||
+          attr.gambar_unggulan?.url ||
+          "",
       },
     };
   } catch (error) {
@@ -41,19 +39,12 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
   }
 }
 
-// ==========================================================
-// ✅ Perbaikan utama: gunakan tipe inline { params: { slug: string } }
-// ==========================================================
-export default async function BeritaDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const berita = await getSingleBerita(params.slug);
+// ✅ Casting `props` agar aman saat build di Vercel
+export default async function BeritaDetailPage(props: any) {
+  const { params } = props as { params: { slug: string } };
 
-  if (!berita) {
-    notFound();
-  }
+  const berita = await getSingleBerita(params.slug);
+  if (!berita) notFound();
 
   const md = new MarkdownIt({ html: true });
   const htmlContent = md.render(berita.isi_konten);
