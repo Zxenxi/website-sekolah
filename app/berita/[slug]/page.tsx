@@ -2,9 +2,9 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import MarkdownIt from "markdown-it";
-import { Berita } from "@/types"; // pastikan types Berita sudah sesuai struktur Strapi
+import { Berita } from "@/types"; // Pastikan tipe ini sesuai dengan struktur data Strapi
 
-// Fungsi ambil data 1 berita
+// 🔹 Fungsi ambil data 1 berita
 async function getSingleBerita(slug: string): Promise<Berita | null> {
   const apiUrl = `${
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
@@ -25,15 +25,18 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
 
     const item = body.data[0];
 
-    // ⚠️ kalau Strapi kamu masih pakai "attributes", ganti ini sesuai struktur data
+    // ⚠️ Sesuaikan dengan struktur Strapi kamu (attributes atau langsung)
     return {
       id: item.id,
-      judul: item.judul, // atau item.attributes.judul
-      isi_konten: item.isi_konten, // atau item.attributes.isi_konten
-      slug: item.slug,
-      publishedAt: item.publishedAt,
+      judul: item.judul || item.attributes?.judul,
+      isi_konten: item.isi_konten || item.attributes?.isi_konten,
+      slug: item.slug || item.attributes?.slug,
+      publishedAt: item.publishedAt || item.attributes?.publishedAt,
       gambar_unggulan: {
-        url: item.gambar_unggulan?.url || "",
+        url:
+          item.gambar_unggulan?.url ||
+          item.attributes?.gambar_unggulan?.data?.attributes?.url ||
+          "",
       },
     };
   } catch (error) {
@@ -42,17 +45,15 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
   }
 }
 
-// ✅ Definisikan tipe props halaman
-type BeritaDetailPageProps = {
+// ✅ Definisikan tipe props sesuai pola Next.js
+interface PageProps {
   params: {
     slug: string;
   };
-};
+}
 
-// Komponen halaman
-export default async function BeritaDetailPage({
-  params,
-}: BeritaDetailPageProps) {
+// 🔹 Komponen halaman detail berita
+export default async function BeritaDetailPage({ params }: PageProps) {
   const berita = await getSingleBerita(params.slug);
 
   if (!berita) {
@@ -64,7 +65,7 @@ export default async function BeritaDetailPage({
 
   const strapiBaseUrl =
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-  const imageUrl = berita.gambar_unggulan.url;
+  const imageUrl = berita.gambar_unggulan?.url;
 
   return (
     <main className="container mx-auto px-6 py-12">
