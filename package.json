@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@types/markdown-it": "^14.1.2",
@@ -24,8 +24,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.4",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "^15.5.3",
     "postcss": "^8.4.38",
     "tailwindcss": "^4.0.0-alpha.16",
     "typescript": "^5"
