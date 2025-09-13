@@ -24,6 +24,7 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
     const item = body.data[0];
     
     // Langsung kembalikan item karena strukturnya sudah cocok (datar)
+    // Ini disesuaikan dengan data JSON Anda
     return {
         id: item.id,
         judul: item.judul,
@@ -42,8 +43,8 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
 }
 
 // ==========================================================
-// INI ADALAH PERBAIKAN UTAMA UNTUK BUILD VERCEL
-// Kita hapus 'interface PageProps' dan gunakan tipe inline:
+// INI ADALAH PERBAIKAN UTAMA UNTUK BUILD VERCEL:
+// Kita hapus 'interface PageProps' yang konflik dan gunakan tipe inline:
 // ==========================================================
 export default async function BeritaDetailPage({ params }: { params: { slug: string } }) {
   const berita = await getSingleBerita(params.slug);
