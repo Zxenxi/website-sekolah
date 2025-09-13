@@ -1,5 +1,5 @@
 // app/jenjang/smp/page.tsx (Versi Final yang Benar)
-import Image from 'next/image';
+// import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import MarkdownIt from 'markdown-it';
 import { HalamanJenjang } from '@/types';
