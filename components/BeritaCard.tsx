@@ -1,9 +1,8 @@
-// components/BeritaCard.tsx
+// components/BeritaCard.tsx (Versi Final yang Benar)
 import Image from 'next/image';
 import Link from 'next/link';
 import { Berita } from '@/types';
 
-// Ubah props untuk menerima seluruh objek 'item'
 interface BeritaCardProps {
   item: Berita;
 }

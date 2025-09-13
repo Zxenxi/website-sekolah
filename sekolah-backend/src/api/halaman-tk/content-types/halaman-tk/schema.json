@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "halaman_tks",
+  "info": {
+    "singularName": "halaman-tk",
+    "pluralName": "halaman-tks",
+    "displayName": "Halaman TK"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "judul_utama": {
+      "type": "string"
+    },
+    "deskripsi": {
+      "type": "richtext"
+    },
+    "gambar_header": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

@@ -1,7 +1,10 @@
-// app/page.tsx (Versi Final yang Benar)
+// app/page.tsx (Versi Desain Baru)
 import JenjangCard from "@/components/JenjangCard";
 import BeritaCard from "@/components/BeritaCard";
-import { Berita } from "@/types"; // Pastikan impor ini ada
+import { Berita } from "@/types";
+import { getBerita } from "@/lib/api"; // Asumsi fungsi fetch dipindah ke lib/api.ts
+import Image from 'next/image';
+import AnimatedSection from "@/components/AnimatedSection"; // Impor komponen animasi
 
 async function getBerita(): Promise<Berita[]> {
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api/beritas?populate=*';
@@ -22,92 +25,114 @@ async function getBerita(): Promise<Berita[]> {
     return [];
   }
 }
-
 export default async function Home() {
   const berita = await getBerita();
 
   return (
     <>
-{/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('/hero-background.jpg')" }}>
+      {/* Hero Section dengan Gambar Latar */}
+        
+      <section 
+      className="relative h-[60vh] flex items-center justify-center text-center bg-cover bg-center" 
+      style={{ backgroundImage: "url('/hero.jpg')" }}
+      >
+        <Image
+          src="/hero.png"
+          alt="Hero Sekolah"
+          fill
+          className="object-cover z-0"
+          />
         <div className="absolute inset-0 bg-black/50"></div> {/* Overlay gelap */}
         <div className="relative z-10 text-white px-4">
-          <h1 className="text-5xl md:text-6xl font-bold font-poppins mb-4 drop-shadow-lg">
+          <h1 className="text-4xl md:text-6xl font-bold font-poppins mb-4 drop-shadow-lg">
             Selamat Datang di Sekolah Impian
           </h1>
-          <p className="text-xl md:text-2xl mb-8 drop-shadow-md">
-            Membentuk Generasi Cerdas, Kreatif, dan Berakhlak Mulia
+          <p className="text-lg md:text-2xl mb-8 drop-shadow-md max-w-3xl mx-auto">
+            Membentuk Generasi Cerdas, Kreatif, dan Berakhlak Mulia dari TK hingga SMP.
           </p>
-          <a href="/pendaftaran" className="bg-sekolah-accent text-sekolah-primary font-bold py-3 px-8 rounded-full hover:bg-yellow-400 text-lg transition-colors duration-300 transform hover:scale-105">
+          <a 
+            href="/pendaftaran" 
+            className="bg-sekolah-accent text-sekolah-primary font-bold py-3 px-8 rounded-full hover:bg-yellow-400 text-lg transition-transform duration-300 transform hover:scale-105"
+            >
             Info PPDB 2026
           </a>
         </div>
       </section>
 
-{/* Sisa halaman ... */}
-      <main className="container mx-auto px-6 py-12">
-        <section>
-          <h2 className="text-3xl font-bold text-center mb-8">Sambutan Kepala Sekolah</h2>
-          <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-50 p-8 rounded-lg">
+      <main>
+        {/* Bagian Sambutan Kepala Sekolah */}
+        <AnimatedSection>
+        <section className="container mx-auto px-6 py-16">
+          <h2 className="text-3xl font-bold font-poppins text-center mb-10 text-sekolah-primary">Sambutan Kepala Sekolah</h2>
+          <div className="flex flex-col md:flex-row items-center gap-10 bg-white p-8 rounded-lg shadow-md">
             <div className="md:w-1/4 text-center">
-              <img src="https://via.placeholder.com/150" alt="Kepala Sekolah" className="rounded-full mx-auto shadow-md" />
-              <h3 className="font-bold mt-4 text-xl">Bpk. Budi Santoso, M.Pd.</h3>
+              <img 
+                src="http://localhost:1337/uploads/image_10_a3c9b22480.jpg" 
+                alt="Kepala Sekolah" 
+                className="rounded-full mx-auto shadow-md w-40 h-40 object-cover" 
+              />
+              <h3 className="font-bold font-poppins mt-4 text-xl text-sekolah-primary">Bpk. Budi Santoso, M.Pd.</h3>
               <p className="text-gray-500">Kepala Sekolah</p>
             </div>
-            <div className="md:w-3/4">
-              <p className="text-gray-700 leading-relaxed text-lg">
-                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa..."
+            <div className="md:w-3/4 text-gray-700 leading-relaxed text-left border-l-4 border-sekolah-accent pl-8">
+              <p className="italic">
+                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa. Kami sangat bangga mempersembahkan website ini sebagai jembatan informasi antara sekolah dengan orang tua, siswa, dan masyarakat..."
               </p>
             </div>
           </div>
         </section>
-
-        <section className="mt-16">
-          <h2 className="text-3xl font-bold text-center mb-8">Pendidikan Berjenjang & Berkelanjutan</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <JenjangCard 
-              title="Taman Kanak-Kanak (TK)"
-              description="Masa bermain sambil belajar yang menyenangkan untuk fondasi masa depan."
-              link="/jenjang/tk"
-              bgColor="bg-green-500"
-            />
-            <JenjangCard 
-              title="Sekolah Dasar (SD)"
-              description="Menumbuhkan potensi, kreativitas, dan karakter positif siswa."
-              link="/jenjang/sd"
-              bgColor="bg-yellow-500"
-            />
-            <JenjangCard 
-              title="Sekolah Menengah (SMP)"
-              description="Mempersiapkan siswa untuk jenjang pendidikan lebih tinggi dan tantangan global."
-              link="/jenjang/smp"
-              bgColor="bg-purple-500"
-            />
+        </AnimatedSection>
+        {/* Bagian Jenjang Pendidikan */}
+        <section className="bg-sekolah-light py-16">
+          <AnimatedSection>
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl font-bold font-poppins text-center mb-10 text-sekolah-primary">Pendidikan Berjenjang & Berkelanjutan</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <JenjangCard 
+                title="Taman Kanak-Kanak (TK)"
+                description="Masa bermain sambil belajar yang menyenangkan untuk fondasi masa depan."
+                link="/jenjang/tk"
+                bgColor="bg-gradient-to-br from-green-500 to-green-600"
+              />
+              <JenjangCard 
+                title="Sekolah Dasar (SD)"
+                description="Menumbuhkan potensi, kreativitas, dan karakter positif siswa."
+                link="/jenjang/sd"
+                bgColor="bg-gradient-to-br from-yellow-500 to-yellow-600"
+                />
+              <JenjangCard 
+                title="Sekolah Menengah (SMP)"
+                description="Mempersiapkan siswa untuk jenjang pendidikan lebih tinggi dan tantangan global."
+                link="/jenjang/smp"
+                bgColor="bg-gradient-to-br from-purple-500 to-purple-600"
+                />
+            </div>
           </div>
+          </AnimatedSection>
         </section>
         
-        {/* BAGIAN BERITA TERBARU */}
-        <section className="mt-16">
-          <h2 className="text-3xl font-bold text-center mb-8">Berita & Informasi Terbaru</h2>
+        {/* Bagian Berita Terbaru */}
+        <section className="container mx-auto px-6 py-16">
+          <AnimatedSection>
+          <h2 className="text-3xl font-bold font-poppins text-center mb-10 text-sekolah-primary">Berita & Informasi Terbaru</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {berita && berita.length > 0 ? (
-              // PERUBAHAN UTAMA DI SINI
-              // app/page.tsx -> di dalam bagian .map()
               berita.map((item: Berita) => (
-                <BeritaCard key={item.id} item={item} />
-              ))
-              // berita.map((item: Berita) => (
-              //   <BeritaCard
-              //     key={item.id}
-              //     judul={item.judul} // Akses langsung
-              //     gambarUrl={item.gambar_unggulan?.url || ''} // Akses langsung
-              //     slug={item.slug} // Akses langsung
-              //   />
-              // ))
-            ) : (
-              <p className="text-center col-span-3 text-gray-500">Belum ada berita yang dipublikasikan.</p>
-            )}
+                <BeritaCard
+                  key={item.id}
+                  item={item}
+                  />
+                ))
+              ) : (
+                <p className="text-center col-span-3 text-gray-500">Belum ada berita yang dipublikasikan.</p>
+              )}
           </div>
+          <div className="text-center mt-12">
+            <a href="/berita" className="bg-sekolah-secondary text-white font-bold py-3 px-8 rounded-full hover:bg-sekolah-primary transition-colors duration-300">
+              Lihat Semua Berita
+            </a>
+          </div>
+              </AnimatedSection>
         </section>
       </main>
     </>

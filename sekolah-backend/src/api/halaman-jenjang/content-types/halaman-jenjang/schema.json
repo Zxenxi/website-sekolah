@@ -1,0 +1,14 @@
+{
+  "kind": "singleType",
+  "collectionName": "halaman_jenjangs",
+  "info": {
+    "singularName": "halaman-jenjang",
+    "pluralName": "halaman-jenjangs",
+    "displayName": "Halaman Jenjang"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}
