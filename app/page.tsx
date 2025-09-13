@@ -1,11 +1,12 @@
-// app/page.tsx (Versi Final Diperbaiki)
+// app/page.tsx (Versi Final Diperbaiki untuk Vercel Build)
 import JenjangCard from "@/components/JenjangCard";
 import BeritaCard from "@/components/BeritaCard";
 import { Berita } from "@/types";
 import AnimatedSection from "@/components/AnimatedSection";
-import Link from 'next/link'; // <--- IMPOR YANG DIPERLUKAN UNTUK MEMPERBAIKI BUILD
+import Link from 'next/link';
+import Image from 'next/image'; // <-- 1. IMPOR KOMPONEN IMAGE
 
-// Fungsi getBerita (diperbaiki agar tidak menggunakan .attributes dan URL yang benar)
+// Fungsi getBerita (Struktur data datar yang sudah benar)
 async function getBerita(): Promise<Berita[]> {
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api/beritas?populate=*';
   
@@ -14,7 +15,7 @@ async function getBerita(): Promise<Berita[]> {
     if (!res.ok) throw new Error('Gagal fetch data');
     
     const body = await res.json();
-    return body.data || []; // Langsung kembalikan data flat
+    return body.data || []; 
 
   } catch (error) {
     console.error("Error di getBerita:", error);
@@ -53,13 +54,21 @@ export default async function Home() {
            <h2 className="text-3xl font-bold font-poppins text-center mb-10 text-sekolah-primary">Sambutan Kepala Sekolah</h2>
            <div className="flex flex-col md:flex-row items-center gap-10 bg-white p-8 rounded-lg shadow-md">
             <div className="md:w-1/4 text-center">
-              <img src="https://via.placeholder.com/150" alt="Kepala Sekolah" className="rounded-full mx-auto shadow-md w-40 h-40 object-cover" />
+              {/* 2. GANTI <img> DENGAN <Image> */}
+              <Image 
+                src="https://via.placeholder.com/150" 
+                alt="Kepala Sekolah"
+                width={160} // Lebar asli (w-40)
+                height={160} // Tinggi asli (h-40)
+                className="rounded-full mx-auto shadow-md object-cover" 
+              />
               <h3 className="font-bold font-poppins mt-4 text-xl text-sekolah-primary">Bpk. Budi Santoso, M.Pd.</h3>
               <p className="text-gray-500">Kepala Sekolah</p>
             </div>
             <div className="md:w-3/4 text-gray-700 leading-relaxed text-left border-l-4 border-sekolah-accent pl-8">
               <p className="italic">
-                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa. Kami sangat bangga mempersembahkan website ini sebagai jembatan informasi..."
+                {/* 3. PERBAIKI TANDA KUTIP DAN APOSTROF */}
+                &ldquo;Assalamu&apos;alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa. Kami sangat bangga mempersembahkan website ini sebagai jembatan informasi...&rdquo;
               </p>
             </div>
           </div>
@@ -98,7 +107,7 @@ export default async function Home() {
               berita.map((item: Berita) => (
                 <BeritaCard
                   key={item.id}
-                  item={item} // Menggunakan struktur data flat yang sudah benar
+                  item={item} 
                 />
               ))
             ) : (
@@ -106,7 +115,6 @@ export default async function Home() {
             )}
           </div>
           <div className="text-center mt-12">
-            {/* PERBAIKAN ERROR BUILD VERCEL: Ganti <a> dengan <Link> */}
             <Link 
               href="/berita" 
               className="bg-sekolah-secondary text-white font-bold py-3 px-8 rounded-full hover:bg-sekolah-primary transition-colors duration-300"
