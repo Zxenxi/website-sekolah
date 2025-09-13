@@ -40,12 +40,9 @@ async function getSingleBerita(slug: string): Promise<Berita | null> {
     return null;
   }
 }
-interface PageProps {
-  params: { slug: string };
-}
 // Komponen Halaman Detail Berita
 // export default async function BeritaDetailPage({ params }: { params: { slug: string } }) {
-export default async function BeritaDetailPage({ params }: PageProps) {
+export default async function BeritaDetailPage({ params }: { params: { slug: string } }) {
   const berita = await getSingleBerita(params.slug);
 
   if (!berita) {
