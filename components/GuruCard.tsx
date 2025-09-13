@@ -23,7 +23,8 @@ const GuruCard = ({ guru }: GuruCardProps) => {
       </div>
       <h3 className="font-bold text-xl font-poppins text-sekolah-primary">{guru.nama_lengkap}</h3>
       <p className="text-sekolah-secondary font-semibold mb-3">{guru.jabatan}</p>
-      <p className="text-gray-600 text-sm italic">"{guru.kutipan}"</p>
+      {/* ✅ Fix ESLint no-unescaped-entities */}
+      <p className="text-gray-600 text-sm italic"> &quot;{guru.kutipan}&quot;</p>
     </div>
   );
 }
