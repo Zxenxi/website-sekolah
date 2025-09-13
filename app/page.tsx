@@ -2,9 +2,10 @@
 import JenjangCard from "@/components/JenjangCard";
 import BeritaCard from "@/components/BeritaCard";
 import { Berita } from "@/types";
-import AnimatedSection from "@/components/AnimatedSection"; // Menggunakan animasi
+import AnimatedSection from "@/components/AnimatedSection";
+import Link from 'next/link'; // <--- IMPOR YANG DIPERLUKAN UNTUK MEMPERBAIKI BUILD
 
-// Fungsi getBerita (diperbaiki agar tidak menggunakan .attributes)
+// Fungsi getBerita (diperbaiki agar tidak menggunakan .attributes dan URL yang benar)
 async function getBerita(): Promise<Berita[]> {
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api/beritas?populate=*';
   
@@ -50,7 +51,18 @@ export default async function Home() {
       <main>
         <AnimatedSection className="container mx-auto px-6 py-16">
            <h2 className="text-3xl font-bold font-poppins text-center mb-10 text-sekolah-primary">Sambutan Kepala Sekolah</h2>
-           {/* ... Konten Sambutan ... */}
+           <div className="flex flex-col md:flex-row items-center gap-10 bg-white p-8 rounded-lg shadow-md">
+            <div className="md:w-1/4 text-center">
+              <img src="https://via.placeholder.com/150" alt="Kepala Sekolah" className="rounded-full mx-auto shadow-md w-40 h-40 object-cover" />
+              <h3 className="font-bold font-poppins mt-4 text-xl text-sekolah-primary">Bpk. Budi Santoso, M.Pd.</h3>
+              <p className="text-gray-500">Kepala Sekolah</p>
+            </div>
+            <div className="md:w-3/4 text-gray-700 leading-relaxed text-left border-l-4 border-sekolah-accent pl-8">
+              <p className="italic">
+                "Assalamu'alaikum Wr. Wb. Puji syukur kehadirat Tuhan Yang Maha Esa. Kami sangat bangga mempersembahkan website ini sebagai jembatan informasi..."
+              </p>
+            </div>
+          </div>
         </AnimatedSection>
 
         <AnimatedSection className="bg-sekolah-light py-16">
@@ -83,7 +95,6 @@ export default async function Home() {
           <h2 className="text-3xl font-bold font-poppins text-center mb-10 text-sekolah-primary">Berita & Informasi Terbaru</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {berita && berita.length > 0 ? (
-              // PERBAIKAN DI SINI: Mengirim 'item' langsung ke BeritaCard
               berita.map((item: Berita) => (
                 <BeritaCard
                   key={item.id}
@@ -95,9 +106,13 @@ export default async function Home() {
             )}
           </div>
           <div className="text-center mt-12">
-            <a href="/berita" className="bg-sekolah-secondary text-white font-bold py-3 px-8 rounded-full hover:bg-sekolah-primary transition-colors duration-300">
+            {/* PERBAIKAN ERROR BUILD VERCEL: Ganti <a> dengan <Link> */}
+            <Link 
+              href="/berita" 
+              className="bg-sekolah-secondary text-white font-bold py-3 px-8 rounded-full hover:bg-sekolah-primary transition-colors duration-300"
+            >
               Lihat Semua Berita
-            </a>
+            </Link>
           </div>
         </AnimatedSection>
       </main>

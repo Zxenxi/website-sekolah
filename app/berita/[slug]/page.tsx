@@ -54,7 +54,7 @@ export default async function BeritaDetailPage({ params }: { params: { slug: str
   
   const md = new MarkdownIt({ html: true });
   const htmlContent = md.render(berita.isi_konten);
-  const strapiBaseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
+  const strapiBaseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
   const imageUrl = berita.gambar_unggulan.url;
 
   return (
